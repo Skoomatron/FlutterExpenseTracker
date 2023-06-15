@@ -93,6 +93,7 @@ class _NewExpenseState extends State<NewExpense> {
               children: [
                 if (width >= 600)
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: TextField(
@@ -126,6 +127,47 @@ class _NewExpenseState extends State<NewExpense> {
                       label: Text('Title'),
                     ),
                   ),
+                if (width >= 600)
+                  Row(
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory,
+                          items: Category.values
+                              .map(
+                                (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category.name.toUpperCase()),
+                            ),
+                          )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value == null) {
+                              return;
+                            }
+                            setState(() {
+                              _selectedCategory = value;
+                            });
+                          }),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(_selectedDate == null
+                                ? 'No Date Selected'
+                                : formatter.format(_selectedDate!)),
+                            IconButton(
+                                onPressed: _openDatePicker,
+                                icon: const Icon(Icons.calendar_month))
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                else
                 Row(
                   children: [
                     Expanded(
@@ -160,6 +202,17 @@ class _NewExpenseState extends State<NewExpense> {
                 const SizedBox(
                   height: 16,
                 ),
+                if (width >= 600)
+                  Row(
+                    children: [
+                      const Spacer(),
+                      ElevatedButton(
+                          onPressed: _submitExpense, child: const Text('Save')),
+                      TextButton(
+                          onPressed: _cancelModal, child: const Text('Cancel'))
+                    ],
+                  )
+                else
                 Row(
                   children: [
                     DropdownButton(
